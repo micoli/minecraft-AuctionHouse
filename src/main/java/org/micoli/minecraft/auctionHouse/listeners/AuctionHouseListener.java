@@ -39,6 +39,6 @@ public class AuctionHouseListener implements Listener{
 	 */
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
-		Json.exportObjectToJson(plugin.getOfflineInventoriesFileName(event.getPlayer().getName()), InventoryExporter.InventoryToStacks(plugin, event.getPlayer()));
+		Json.exportObjectToJson(InventoryExporter.getOfflineInventoriesFileName(event.getPlayer().getName()), InventoryExporter.InventoryToStacks(plugin, event.getPlayer()));
 	}
 }

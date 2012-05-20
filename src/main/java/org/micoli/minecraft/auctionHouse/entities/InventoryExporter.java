@@ -12,12 +12,11 @@ import org.micoli.minecraft.utils.Json;
 
 import com.google.gson.reflect.TypeToken;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class InventoryExporter.
  */
 public class InventoryExporter {
-
+	
 	/** The item stacks. */
 	@SuppressWarnings("unused")
 	private HashSet<ItemStack> itemStacks = new HashSet<ItemStack>();
@@ -39,7 +38,7 @@ public class InventoryExporter {
 				if (offlinePlayer == null) {
 					return;
 				}
-				File jsonFile = new File(plugin.getOfflineInventoriesFileName(userName));
+				File jsonFile = new File(InventoryExporter.getOfflineInventoriesFileName(userName));
 				if(jsonFile.exists()){
 					itemStacks = (HashSet<ItemStack>) Json.importFromJson(jsonFile, new TypeToken<HashSet<ItemStack>>() {}.getType());
 				}
@@ -66,6 +65,20 @@ public class InventoryExporter {
 			}
 		}
 		return iStacks;
+	}
+	
+	/**
+	 * Gets the offline inventories file name.
+	 *
+	 * @param userName the user name
+	 * @return the offline inventories file name
+	 */
+	public static String getOfflineInventoriesFileName(String userName){
+		File path = new File(AuctionHouse.getInstance().getDataFolder(),"inventories");
+		if (!path.exists()) {
+			path.mkdir();
+		}
+		return path.getAbsolutePath()+'/'+userName+".json";
 	}
 
 	/* (non-Javadoc)

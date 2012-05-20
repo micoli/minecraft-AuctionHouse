@@ -1,7 +1,6 @@
 package org.micoli.minecraft.auctionHouse;
 
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,15 +65,8 @@ public class AuctionHouse extends QDBukkitPlugin implements ActionListener, JSON
 			jsonapi.registerAPICallHandler(this);
 		}
 		getPm().registerEvents(new AuctionHouseListener(this),this);
-
+		
 		executor = new AuctionHouseCommandManager(this, new Class[] { getClass() });
-
-		for (int i = 1; i < 2; i++) {
-			Auction auction = new Auction();
-			auction.setSeller(String.format("seller %d", i));
-			auction.setItemId(i);
-			auction.save();
-		}
 	}
 
 	/*
@@ -94,10 +86,10 @@ public class AuctionHouse extends QDBukkitPlugin implements ActionListener, JSON
 	 * @see com.alecgorge.minecraft.jsonapi.api.JSONAPICallHandler#willHandle(com.alecgorge.minecraft.jsonapi.api.APIMethodName)
 	 */
 	public boolean willHandle(APIMethodName methodName) {
-		if(methodName.matches("listAllAuctions")) {
+		if(methodName.matches("auctionHouse.listAllAuctions")) {
 			return true;
 		}
-		if(methodName.matches("getPlayerInventory")) {
+		if(methodName.matches("auctionHouse.getPlayerInventory")) {
 			return true;
 		}
 		return false;
@@ -107,31 +99,16 @@ public class AuctionHouse extends QDBukkitPlugin implements ActionListener, JSON
 	 * @see com.alecgorge.minecraft.jsonapi.api.JSONAPICallHandler#handle(com.alecgorge.minecraft.jsonapi.api.APIMethodName, java.lang.Object[])
 	 */
 	public Object handle(APIMethodName methodName, Object[] args) {
-		if(methodName.matches("listAllAuctions")) {
+		if(methodName.matches("auctionHouse.listAllAuctions")) {
 			return Auction.getAllAuction();
 		}
-		if(methodName.matches("getPlayerInventory")) {
+		if(methodName.matches("auctionHouse.getPlayerInventory")) {
 			InventoryExporter playerInventory = new InventoryExporter(this,(String)args[0]);
-			logger.log("------- %s",playerInventory.toString());
 			return playerInventory;
 		}
 		return "";
 	}
 
-	/**
-	 * Gets the offline inventories file name.
-	 *
-	 * @param userName the user name
-	 * @return the offline inventories file name
-	 */
-	public String getOfflineInventoriesFileName(String userName){
-		File path = new File(getDataFolder(),"inventories");
-		if (!path.exists()) {
-			path.mkdir();
-		}
-		return path.getAbsolutePath()+'/'+userName+".json";
-	}
-	
 	/**
 	 * Cmd_list.
 	 *
