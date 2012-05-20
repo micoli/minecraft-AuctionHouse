@@ -1,0 +1,8 @@
+name: AuctionHouse
+main: org.micoli.minecraft.auctionHouse.AuctionHouse
+version: 0.1
+description: Auction house interface
+depend: [Vault,morgUtils,JSONAPI]
+commands:
+    ah:
+      description: main command 
