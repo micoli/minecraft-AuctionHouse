@@ -11,6 +11,7 @@ import org.micoli.minecraft.auctionHouse.AuctionHouse;
 import org.micoli.minecraft.utils.Json;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Auction.
  */
@@ -49,13 +50,25 @@ public class Auction {
 	/** The open. */
 	boolean auctionOpen = true;
 	
+	/**
+	 * Instantiates a new auction.
+	 */
 	public Auction(){
 		plugin = AuctionHouse.getInstance();
 	}
+	
+	/**
+	 * Gets the all auction.
+	 *
+	 * @return the all auction
+	 */
 	public static List<Auction> getAllAuction() {
 		return plugin.getStaticDatabase().find(Auction.class).findList();
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		return Json.exportObjectToJson(this);
 	}
@@ -76,6 +89,8 @@ public class Auction {
 
 
 	/**
+	 * Gets the plugin.
+	 *
 	 * @return the plugin
 	 */
 	public static AuctionHouse getPlugin() {
@@ -83,6 +98,8 @@ public class Auction {
 	}
 
 	/**
+	 * Sets the plugin.
+	 *
 	 * @param plugin the plugin to set
 	 */
 	public static void setPlugin(AuctionHouse plugin) {
@@ -90,6 +107,8 @@ public class Auction {
 	}
 
 	/**
+	 * Gets the id.
+	 *
 	 * @return the id
 	 */
 	public int getId() {
@@ -97,6 +116,8 @@ public class Auction {
 	}
 
 	/**
+	 * Sets the id.
+	 *
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
@@ -104,6 +125,8 @@ public class Auction {
 	}
 
 	/**
+	 * Gets the item id.
+	 *
 	 * @return the itemId
 	 */
 	public int getItemId() {
@@ -111,6 +134,8 @@ public class Auction {
 	}
 
 	/**
+	 * Sets the item id.
+	 *
 	 * @param itemId the itemId to set
 	 */
 	public void setItemId(int itemId) {
@@ -118,6 +143,8 @@ public class Auction {
 	}
 
 	/**
+	 * Gets the quantity.
+	 *
 	 * @return the quantity
 	 */
 	public int getQuantity() {
@@ -125,6 +152,8 @@ public class Auction {
 	}
 
 	/**
+	 * Sets the quantity.
+	 *
 	 * @param quantity the quantity to set
 	 */
 	public void setQuantity(int quantity) {
@@ -132,6 +161,8 @@ public class Auction {
 	}
 
 	/**
+	 * Gets the seller.
+	 *
 	 * @return the seller
 	 */
 	public String getSeller() {
@@ -139,6 +170,8 @@ public class Auction {
 	}
 
 	/**
+	 * Sets the seller.
+	 *
 	 * @param seller the seller to set
 	 */
 	public void setSeller(String seller) {
@@ -146,6 +179,8 @@ public class Auction {
 	}
 
 	/**
+	 * Gets the start date.
+	 *
 	 * @return the startDate
 	 */
 	public Date getStartDate() {
@@ -153,6 +188,8 @@ public class Auction {
 	}
 
 	/**
+	 * Sets the start date.
+	 *
 	 * @param startDate the startDate to set
 	 */
 	public void setStartDate(Date startDate) {
@@ -160,6 +197,8 @@ public class Auction {
 	}
 
 	/**
+	 * Gets the min price auction.
+	 *
 	 * @return the minPriceAuction
 	 */
 	public double getMinPriceAuction() {
@@ -167,6 +206,8 @@ public class Auction {
 	}
 
 	/**
+	 * Sets the min price auction.
+	 *
 	 * @param minPriceAuction the minPriceAuction to set
 	 */
 	public void setMinPriceAuction(double minPriceAuction) {
@@ -174,6 +215,8 @@ public class Auction {
 	}
 
 	/**
+	 * Gets the min price sale.
+	 *
 	 * @return the minPriceSale
 	 */
 	public double getMinPriceSale() {
@@ -181,6 +224,8 @@ public class Auction {
 	}
 
 	/**
+	 * Sets the min price sale.
+	 *
 	 * @param minPriceSale the minPriceSale to set
 	 */
 	public void setMinPriceSale(double minPriceSale) {
@@ -188,6 +233,8 @@ public class Auction {
 	}
 
 	/**
+	 * Gets the expiration date.
+	 *
 	 * @return the expirationDate
 	 */
 	public Date getExpirationDate() {
@@ -195,6 +242,8 @@ public class Auction {
 	}
 
 	/**
+	 * Sets the expiration date.
+	 *
 	 * @param expirationDate the expirationDate to set
 	 */
 	public void setExpirationDate(Date expirationDate) {
@@ -202,6 +251,8 @@ public class Auction {
 	}
 
 	/**
+	 * Checks if is auction open.
+	 *
 	 * @return the open
 	 */
 	public boolean isAuctionOpen() {
@@ -209,7 +260,9 @@ public class Auction {
 	}
 
 	/**
-	 * @param open the open to set
+	 * Sets the auction open.
+	 *
+	 * @param auctionOpen the new auction open
 	 */
 	public void setAuctionOpen(boolean auctionOpen) {
 		this.auctionOpen = auctionOpen;

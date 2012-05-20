@@ -3,6 +3,7 @@ package org.micoli.minecraft.auctionHouse.managers;
 import org.micoli.minecraft.bukkit.QDBukkitPlugin;
 import org.micoli.minecraft.bukkit.QDCommandManager;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class LocalPlanCommandManager.
  */

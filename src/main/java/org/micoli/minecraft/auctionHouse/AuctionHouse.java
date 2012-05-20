@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.micoli.minecraft.auctionHouse.entities.Auction;
 import org.micoli.minecraft.auctionHouse.entities.InventoryExporter;
@@ -20,6 +19,7 @@ import com.alecgorge.minecraft.jsonapi.JSONAPI;
 import com.alecgorge.minecraft.jsonapi.api.APIMethodName;
 import com.alecgorge.minecraft.jsonapi.api.JSONAPICallHandler;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class LocalPlan.
  */
@@ -41,7 +41,8 @@ public class AuctionHouse extends QDBukkitPlugin implements ActionListener, JSON
 	}
 
 	/**
-	 * 
+	 * On enable.
+	 *
 	 * @see org.micoli.minecraft.bukkit.QDBukkitPlugin#onEnable()
 	 */
 	@Override
@@ -80,12 +81,18 @@ public class AuctionHouse extends QDBukkitPlugin implements ActionListener, JSON
 	 * 
 	 * @see org.micoli.minecraft.bukkit.QDBukkitPlugin#getDatabaseORMClasses()
 	 */
+	/* (non-Javadoc)
+	 * @see org.micoli.minecraft.bukkit.QDBukkitPlugin#getDatabaseORMClasses()
+	 */
 	protected java.util.List<Class<?>> getDatabaseORMClasses() {
 		List<Class<?>> list = new ArrayList<Class<?>>();
 		list.add(Auction.class);
 		return list;
 	};
 
+	/* (non-Javadoc)
+	 * @see com.alecgorge.minecraft.jsonapi.api.JSONAPICallHandler#willHandle(com.alecgorge.minecraft.jsonapi.api.APIMethodName)
+	 */
 	public boolean willHandle(APIMethodName methodName) {
 		if(methodName.matches("listAllAuctions")) {
 			return true;
@@ -96,18 +103,27 @@ public class AuctionHouse extends QDBukkitPlugin implements ActionListener, JSON
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.alecgorge.minecraft.jsonapi.api.JSONAPICallHandler#handle(com.alecgorge.minecraft.jsonapi.api.APIMethodName, java.lang.Object[])
+	 */
 	public Object handle(APIMethodName methodName, Object[] args) {
 		if(methodName.matches("listAllAuctions")) {
 			return Auction.getAllAuction();
 		}
 		if(methodName.matches("getPlayerInventory")) {
 			InventoryExporter playerInventory = new InventoryExporter(this,(String)args[0]);
-			logger.log("-------%s",playerInventory.toString());
+			logger.log("------- %s",playerInventory.toString());
 			return playerInventory;
 		}
 		return "";
 	}
 
+	/**
+	 * Gets the offline inventories file name.
+	 *
+	 * @param userName the user name
+	 * @return the offline inventories file name
+	 */
 	public String getOfflineInventoriesFileName(String userName){
 		File path = new File(getDataFolder(),"inventories");
 		if (!path.exists()) {
@@ -115,18 +131,15 @@ public class AuctionHouse extends QDBukkitPlugin implements ActionListener, JSON
 		}
 		return path.getAbsolutePath()+'/'+userName+".json";
 	}
+	
 	/**
 	 * Cmd_list.
-	 * 
-	 * @param sender
-	 *            the sender
-	 * @param command
-	 *            the command
-	 * @param label
-	 *            the label
-	 * @param args
-	 *            the args
-	 * @throws Exception
+	 *
+	 * @param sender the sender
+	 * @param command the command
+	 * @param label the label
+	 * @param args the args
+	 * @throws Exception the exception
 	 */
 	@QDCommand(aliases = "list", permissions = { "test.list" }, usage = "", description = "list test")
 	public void cmd_list(CommandSender sender, Command command, String label, String[] args) throws Exception {

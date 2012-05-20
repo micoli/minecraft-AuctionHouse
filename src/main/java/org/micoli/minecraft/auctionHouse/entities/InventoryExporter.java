@@ -12,11 +12,22 @@ import org.micoli.minecraft.utils.Json;
 
 import com.google.gson.reflect.TypeToken;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class InventoryExporter.
+ */
 public class InventoryExporter {
 
+	/** The item stacks. */
 	@SuppressWarnings("unused")
 	private HashSet<ItemStack> itemStacks = new HashSet<ItemStack>();
 
+	/**
+	 * Instantiates a new inventory exporter.
+	 *
+	 * @param plugin the plugin
+	 * @param userName the user name
+	 */
 	@SuppressWarnings("unchecked")
 	public InventoryExporter(AuctionHouse plugin, String userName) {
 		try {
@@ -40,6 +51,13 @@ public class InventoryExporter {
 		}
 	}
 	
+	/**
+	 * Inventory to stacks.
+	 *
+	 * @param plugin the plugin
+	 * @param player the player
+	 * @return the hash set
+	 */
 	public static HashSet<ItemStack> InventoryToStacks(AuctionHouse plugin,Player player){
 		HashSet<ItemStack> iStacks = new HashSet<ItemStack>();
 		for (ItemStack itemStack : player.getInventory().getContents()) {
@@ -50,6 +68,9 @@ public class InventoryExporter {
 		return iStacks;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return Json.exportObjectToJson(this);
 	}
