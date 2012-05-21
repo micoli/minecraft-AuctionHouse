@@ -32,9 +32,12 @@ public class Auction {
 	/** The quantity. */
 	int quantity = 1;
 	
+	/** The remaining quantity. */
+	int remainingQuantity = 1;
+	
 	/** The seller. */
 	String seller = "";
-	
+
 	/** The start date. */
 	Date startDate = new Date();
 	
@@ -44,11 +47,17 @@ public class Auction {
 	/** The min price sale. */
 	double minPriceSale=0;
 	
+	/** The remaining min price sale. */
+	double remainingMinPriceSale=0;
+	
 	/** The expiration date. */
 	Date expirationDate = new Date();
 	
 	/** The open. */
 	boolean auctionOpen = true;
+	
+	/** The splitable. */
+	boolean splitable = true; 
 	
 	/**
 	 * Instantiates a new auction.
@@ -266,5 +275,59 @@ public class Auction {
 	 */
 	public void setAuctionOpen(boolean auctionOpen) {
 		this.auctionOpen = auctionOpen;
+	}
+
+	/**
+	 * Gets the remaining quantity.
+	 *
+	 * @return the remainingQuantity
+	 */
+	public final int getRemainingQuantity() {
+		return remainingQuantity;
+	}
+
+	/**
+	 * Sets the remaining quantity.
+	 *
+	 * @param remainingQuantity the remainingQuantity to set
+	 */
+	public final void setRemainingQuantity(int remainingQuantity) {
+		this.remainingQuantity = remainingQuantity;
+	}
+
+	/**
+	 * Gets the remaining min price sale.
+	 *
+	 * @return the remainingMinPriceSale
+	 */
+	public final double getRemainingMinPriceSale() {
+		return remainingMinPriceSale;
+	}
+
+	/**
+	 * Sets the remaining min price sale.
+	 *
+	 * @param remainingMinPriceSale the remainingMinPriceSale to set
+	 */
+	public final void setRemainingMinPriceSale(double remainingMinPriceSale) {
+		this.remainingMinPriceSale = remainingMinPriceSale;
+	}
+
+	/**
+	 * Checks if is splitable.
+	 *
+	 * @return the splitable
+	 */
+	public final boolean isSplitable() {
+		return splitable;
+	}
+
+	/**
+	 * Sets the splitable.
+	 *
+	 * @param splitable the splitable to set
+	 */
+	public final void setSplitable(boolean splitable) {
+		this.splitable = splitable;
 	}
 }
