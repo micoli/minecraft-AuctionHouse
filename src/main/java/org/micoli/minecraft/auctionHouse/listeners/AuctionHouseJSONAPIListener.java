@@ -1,54 +1,70 @@
 package org.micoli.minecraft.auctionHouse.listeners;
 
+import java.util.List;
+
 import org.micoli.minecraft.auctionHouse.AuctionHouse;
 import org.micoli.minecraft.auctionHouse.entities.Auction;
 import org.micoli.minecraft.auctionHouse.entities.InventoryExporter;
 import org.micoli.minecraft.auctionHouse.managers.AuctionHouseManager;
 
-import com.alecgorge.minecraft.jsonapi.api.APIMethodName;
-import com.alecgorge.minecraft.jsonapi.api.JSONAPICallHandler;
+import com.alecgorge.minecraft.jsonapi.dynamic.API_Method;
+import com.alecgorge.minecraft.jsonapi.dynamic.JSONAPIMethodProvider;
 
-public class AuctionHouseJSONAPIListener implements JSONAPICallHandler{
+public class AuctionHouseJSONAPIListener implements JSONAPIMethodProvider{
 	AuctionHouse plugin;
-	public AuctionHouseJSONAPIListener(AuctionHouse plugin) {
-		this.plugin = plugin;
+	public AuctionHouseJSONAPIListener() {
+		this.plugin = AuctionHouse.getInstance();
 	}
-	/* (non-Javadoc)
-	 * @see com.alecgorge.minecraft.jsonapi.api.JSONAPICallHandler#willHandle(com.alecgorge.minecraft.jsonapi.api.APIMethodName)
-	 */
-	public boolean willHandle(APIMethodName methodName) {
-		if(methodName.matches("auctionHouse.listAllAuctions")) {
-			return true;
+	
+	
+	@API_Method(
+		namespace = "auctionHouse",
+		name="bid",
+		argumentDescriptions = {
+			"auctionId",
+			"buyerName",
+			"price"
+		
 		}
-		if(methodName.matches("auctionHouse.getPlayerInventory")) {
-			return true;
+	)
+	public String bid(String auctionId,String buyerName,String price ){
+		return AuctionHouseManager.bid(Integer.parseInt(auctionId), buyerName, Double.parseDouble(price));
+	}
+		
+	@API_Method(
+		namespace = "auctionHouse",
+		name="buy",
+		argumentDescriptions = {
+			"auctionId",
+			"buyerName",
+			"price",
+			"quantity"
 		}
-		if(methodName.matches("auctionHouse.bid")) {
-			return true;
+	)
+	public String bid(String auctionId,String buyerName,String price, String quantity){
+		return AuctionHouseManager.buy(Integer.parseInt(auctionId), buyerName, Double.parseDouble(price),Integer.parseInt(quantity));
+	}
+		
+	@API_Method(
+		namespace = "auctionHouse",
+		name="getPlayerInventory",
+		argumentDescriptions = {
+			"userName"
 		}
-		if(methodName.matches("auctionHouse.buy")) {
-			return true;
-		}
-		return false;
+	)
+	public InventoryExporter getPlayerInventory(String username) {
+		return new InventoryExporter(plugin, username);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.alecgorge.minecraft.jsonapi.api.JSONAPICallHandler#handle(com.alecgorge.minecraft.jsonapi.api.APIMethodName, java.lang.Object[])
-	 */
-	public Object handle(APIMethodName methodName, Object[] args) {
-		if(methodName.matches("auctionHouse.listAllAuctions")) {
-			return Auction.getAllAuction();
-		}
-		if(methodName.matches("auctionHouse.getPlayerInventory")) {
-			return new InventoryExporter(plugin, (String)args[0]);
-		}
-		if(methodName.matches("auctionHouse.bid")) {
-			return AuctionHouseManager.bid(Integer.parseInt((String)args[0]), (String)args[1], Integer.parseInt((String)args[2]), Double.parseDouble((String)args[3]));
-		}
-		if(methodName.matches("auctionHouse.buy")) {
-			return AuctionHouseManager.buy(Integer.parseInt((String)args[0]), (String)args[1], Double.parseDouble((String)args[2]));
-		}
-		
-		return "";
+	@API_Method(
+		namespace = "auctionHouse",
+		name="listAllAuctions",
+		argumentDescriptions = {
+				"userName"
+			}
+	)
+	public List<Auction> listAllAuctions(String userName) {
+		return Auction.getAllAuction();
 	}
+
 }

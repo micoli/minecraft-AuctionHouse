@@ -2,12 +2,14 @@ package org.micoli.minecraft.auctionHouse;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.micoli.minecraft.auctionHouse.entities.Auction;
+import org.micoli.minecraft.auctionHouse.entities.AuctionHistory;
 import org.micoli.minecraft.auctionHouse.listeners.AuctionHouseJSONAPIListener;
 import org.micoli.minecraft.auctionHouse.listeners.AuctionHouseListener;
 import org.micoli.minecraft.auctionHouse.managers.AuctionHouseCommandManager;
@@ -60,11 +62,31 @@ public class AuctionHouse extends QDBukkitPlugin implements ActionListener {
 
 		if (checkplugin != null) {
 			JSONAPI jsonapi = (JSONAPI) checkplugin;
-			jsonapi.registerAPICallHandler(new AuctionHouseJSONAPIListener(this));
+			AuctionHouseJSONAPIListener auctionHouseJSONAPIListener = new AuctionHouseJSONAPIListener();
+			//jsonapi.registerAPICallHandler(auctionHouseJSONAPIListener);
+			jsonapi.registerMethods(auctionHouseJSONAPIListener);
 		}
 		getPm().registerEvents(new AuctionHouseListener(this),this);
 		
 		executor = new AuctionHouseCommandManager(this, new Class[] { getClass() });
+		for (int i=0;i<60;i++){
+			Auction auction = new Auction();
+			auction.setItemId(i%10);
+			Date exp = new Date();
+			auction.setStartDate(exp);
+			auction.setExpirationDate(exp);
+			auction.setAuctionOpen(true);
+			auction.setQuantity(i%10);
+			auction.setRemainingQuantity(auction.getQuantity());
+			auction.setSplitable(i%3==1?true:false);
+			double price = (Math.round(Math.random()*10000))/100;
+			auction.setBidPrice(price);
+			auction.setRemainingBidPrice(auction.getBidPrice());
+			auction.setSalePrice(price*1.10);
+			auction.setRemainingSalePrice(auction.getSalePrice());
+			auction.setSeller("seller"+Integer.toString(i));
+			auction.save();
+		}
 	}
 
 	/*
@@ -77,6 +99,7 @@ public class AuctionHouse extends QDBukkitPlugin implements ActionListener {
 	protected java.util.List<Class<?>> getDatabaseORMClasses() {
 		List<Class<?>> list = new ArrayList<Class<?>>();
 		list.add(Auction.class);
+		list.add(AuctionHistory.class);
 		return list;
 	};
 

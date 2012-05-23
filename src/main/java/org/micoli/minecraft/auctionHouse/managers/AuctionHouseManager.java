@@ -12,8 +12,17 @@ import org.micoli.minecraft.utils.PluginEnvironment;
  *
  */
 public class AuctionHouseManager {
-	public static String bid(int auctionId,String buyerName,int quantity,double price){
+	private static void allocateAuctionToPlayer(String buyerName,int itemId,int quantity){
+		AuctionHouse.getInstance().logger.log("Allocation %d*%d to %s",quantity,itemId,buyerName);
+	}
+	private static double getStackPrice(double price,int numberOfStack){
+		return Math.ceil(price/numberOfStack);
+	}
+	
+	public static String bid(int auctionId, String buyerName, double price){
+		Economy economy = PluginEnvironment.getVaultEconomy(AuctionHouse.getInstance());
 		Auction auction = AuctionHouse.getInstance().getStaticDatabase().find(Auction.class).where().eq("id", auctionId).findUnique();
+
 		if(auction==null){
 			return "unknown auction";
 		}
@@ -22,14 +31,27 @@ public class AuctionHouseManager {
 			return "auction already closed";
 		}
 
-		if(price<auction.getMinPriceAuction()){
+		if(price<auction.getRemainingBidPrice()){
 			return "price inferior to price auction";
 		}
 
-		return "1";
+		auction.setAuctionOpen(true);
+		auction.setBuyer(buyerName);
+		auction.setRemainingBidPrice(price);
+		
+		AuctionHistory auctionHistory = new AuctionHistory(auction.getId());
+		auctionHistory.setBuyer(buyerName);
+		auctionHistory.setQuantity(auction.getQuantity());
+		auctionHistory.setPrice(auction.getRemainingBidPrice());
+		
+		auction.save();
+		auctionHistory.save();
+		economy.withdrawPlayer(buyerName,price);
+
+		return "ok";
 	}
 	
-	public static String buy(int auctionId,String buyerName,double price){
+	public static String buy(int auctionId,String buyerName, double price,int quantity){
 		Auction auction = AuctionHouse.getInstance().getStaticDatabase().find(Auction.class).where().eq("id", auctionId).findUnique();
 		Economy economy = PluginEnvironment.getVaultEconomy(AuctionHouse.getInstance());
 		if(auction==null){
@@ -40,26 +62,41 @@ public class AuctionHouseManager {
 			return "auction already closed";
 		}
 
-		if(price<auction.getMinPriceSale()){
+		if(price<AuctionHouseManager.getStackPrice(auction.getRemainingSalePrice(),quantity)*quantity){
 			return "price inferior to sale price";
 		}
 
 		if(economy.getBalance(buyerName)<price){
 			return "balance inferior to sale price";
 		}
+
+		if(economy.getBalance(buyerName)<price){
+			return "balance inferior to sale price";
+		}
+
+		if(!auction.isSplitable() && quantity !=auction.getRemainingQuantity()){
+			return "item not splitable, quantity different to remaining quantity";
+		}
 		
-		auction.setAuctionOpen(false);
-		auction.setRemainingQuantity(0);
-		auction.setRemainingMinPriceSale(0.0);
+		if(quantity >auction.getRemainingQuantity()){
+			return "not more stacks for requested quantity";
+		}
+		
+		auction.setRemainingQuantity(auction.getQuantity()-quantity);
+		auction.setRemainingSalePrice(auction.getRemainingSalePrice()-price);
+		auction.setBuyer(buyerName);
+		auction.setRemainingBidPrice(auction.getRemainingBidPrice()-AuctionHouseManager.getStackPrice(auction.getRemainingBidPrice(),quantity)*quantity);
+		auction.setAuctionOpen(auction.getRemainingQuantity()>0);
 		
 		AuctionHistory auctionHistory = new AuctionHistory(auction.getId());
 		auctionHistory.setBuyer(buyerName);
 		auctionHistory.setQuantity(auction.getQuantity());
-		auctionHistory.setPrice(auction.getMinPriceSale());
+		auctionHistory.setPrice(auction.getRemainingSalePrice());
 		
 		auction.save();
 		auctionHistory.save();
 		economy.withdrawPlayer(buyerName,price);
+		allocateAuctionToPlayer(buyerName,auction.getItemId(),quantity);
 
 		return "ok";
 	}

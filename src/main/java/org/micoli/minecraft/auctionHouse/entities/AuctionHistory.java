@@ -39,6 +39,8 @@ public class AuctionHistory {
 	
 	String comment="";;
 	
+	public AuctionHistory(){
+	}
 	/**
 	 * Instantiates a new auction.
 	 */
@@ -81,98 +83,98 @@ public class AuctionHistory {
 	/**
 	 * @return the id
 	 */
-	public final int getId() {
+	public int getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public final void setId(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
 	/**
 	 * @return the auctionId
 	 */
-	public final int getAuctionId() {
+	public int getAuctionId() {
 		return auctionId;
 	}
 
 	/**
 	 * @param auctionId the auctionId to set
 	 */
-	public final void setAuctionId(int auctionId) {
+	public void setAuctionId(int auctionId) {
 		this.auctionId = auctionId;
 	}
 
 	/**
 	 * @return the quantity
 	 */
-	public final int getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 
 	/**
 	 * @param quantity the quantity to set
 	 */
-	public final void setQuantity(int quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
 	/**
 	 * @return the buyer
 	 */
-	public final String getBuyer() {
+	public String getBuyer() {
 		return buyer;
 	}
 
 	/**
 	 * @param buyer the buyer to set
 	 */
-	public final void setBuyer(String buyer) {
+	public void setBuyer(String buyer) {
 		this.buyer = buyer;
 	}
 
 	/**
 	 * @return the eventDate
 	 */
-	public final Date getEventDate() {
+	public Date getEventDate() {
 		return eventDate;
 	}
 
 	/**
 	 * @param eventDate the eventDate to set
 	 */
-	public final void setEventDate(Date eventDate) {
+	public void setEventDate(Date eventDate) {
 		this.eventDate = eventDate;
 	}
 
 	/**
 	 * @return the price
 	 */
-	public final double getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
 	/**
 	 * @param price the price to set
 	 */
-	public final void setPrice(double price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
 	/**
 	 * @return the comment
 	 */
-	public final String getComment() {
+	public String getComment() {
 		return comment;
 	}
 
 	/**
 	 * @param comment the comment to set
 	 */
-	public final void setComment(String comment) {
+	public void setComment(String comment) {
 		this.comment = comment;
 	}
 }

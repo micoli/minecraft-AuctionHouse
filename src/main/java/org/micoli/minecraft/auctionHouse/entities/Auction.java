@@ -29,29 +29,35 @@ public class Auction {
 	/** The item id. */
 	int itemId = 1;
 	
+	/** The seller. */
+	String seller = "";
+
+	/** The buyer. */
+	String buyer = "";
+
+	/** The start date. */
+	Date startDate = new Date();
+	
+	/** The expiration date. */
+	Date expirationDate = new Date();
+
 	/** The quantity. */
 	int quantity = 1;
 	
 	/** The remaining quantity. */
 	int remainingQuantity = 1;
 	
-	/** The seller. */
-	String seller = "";
-
-	/** The start date. */
-	Date startDate = new Date();
-	
 	/** The min price auction. */
-	double minPriceAuction=0;
-	
-	/** The min price sale. */
-	double minPriceSale=0;
+	double bidPrice=0;
 	
 	/** The remaining min price sale. */
-	double remainingMinPriceSale=0;
+	double remainingBidPrice=0;
+
+	/** The min price sale. */
+	double salePrice=0;
 	
-	/** The expiration date. */
-	Date expirationDate = new Date();
+	/** The remaining min price sale. */
+	double remainingSalePrice=0;
 	
 	/** The open. */
 	boolean auctionOpen = true;
@@ -63,7 +69,7 @@ public class Auction {
 	 * Instantiates a new auction.
 	 */
 	public Auction(){
-		plugin = AuctionHouse.getInstance();
+		setPlugin(AuctionHouse.getInstance());
 	}
 	
 	/**
@@ -72,7 +78,7 @@ public class Auction {
 	 * @return the all auction
 	 */
 	public static List<Auction> getAllAuction() {
-		return plugin.getStaticDatabase().find(Auction.class).findList();
+		return plugin.getStaticDatabase().find(Auction.class).where().eq("auction_open", true).findList();
 	}
 	
 	/* (non-Javadoc)
@@ -127,7 +133,7 @@ public class Auction {
 	/**
 	 * Sets the id.
 	 *
-	 * @param id the id to set
+	 * @param id the new id
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -136,7 +142,7 @@ public class Auction {
 	/**
 	 * Gets the item id.
 	 *
-	 * @return the itemId
+	 * @return the item id
 	 */
 	public int getItemId() {
 		return itemId;
@@ -145,28 +151,10 @@ public class Auction {
 	/**
 	 * Sets the item id.
 	 *
-	 * @param itemId the itemId to set
+	 * @param itemId the new item id
 	 */
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
-	}
-
-	/**
-	 * Gets the quantity.
-	 *
-	 * @return the quantity
-	 */
-	public int getQuantity() {
-		return quantity;
-	}
-
-	/**
-	 * Sets the quantity.
-	 *
-	 * @param quantity the quantity to set
-	 */
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	/**
@@ -181,16 +169,24 @@ public class Auction {
 	/**
 	 * Sets the seller.
 	 *
-	 * @param seller the seller to set
+	 * @param seller the new seller
 	 */
 	public void setSeller(String seller) {
 		this.seller = seller;
 	}
 
+	public String getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(String buyer) {
+		this.buyer = buyer;
+	}
+
 	/**
 	 * Gets the start date.
 	 *
-	 * @return the startDate
+	 * @return the start date
 	 */
 	public Date getStartDate() {
 		return startDate;
@@ -199,52 +195,16 @@ public class Auction {
 	/**
 	 * Sets the start date.
 	 *
-	 * @param startDate the startDate to set
+	 * @param startDate the new start date
 	 */
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
 	/**
-	 * Gets the min price auction.
-	 *
-	 * @return the minPriceAuction
-	 */
-	public double getMinPriceAuction() {
-		return minPriceAuction;
-	}
-
-	/**
-	 * Sets the min price auction.
-	 *
-	 * @param minPriceAuction the minPriceAuction to set
-	 */
-	public void setMinPriceAuction(double minPriceAuction) {
-		this.minPriceAuction = minPriceAuction;
-	}
-
-	/**
-	 * Gets the min price sale.
-	 *
-	 * @return the minPriceSale
-	 */
-	public double getMinPriceSale() {
-		return minPriceSale;
-	}
-
-	/**
-	 * Sets the min price sale.
-	 *
-	 * @param minPriceSale the minPriceSale to set
-	 */
-	public void setMinPriceSale(double minPriceSale) {
-		this.minPriceSale = minPriceSale;
-	}
-
-	/**
 	 * Gets the expiration date.
 	 *
-	 * @return the expirationDate
+	 * @return the expiration date
 	 */
 	public Date getExpirationDate() {
 		return expirationDate;
@@ -253,16 +213,124 @@ public class Auction {
 	/**
 	 * Sets the expiration date.
 	 *
-	 * @param expirationDate the expirationDate to set
+	 * @param expirationDate the new expiration date
 	 */
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
 	}
 
 	/**
+	 * Gets the quantity.
+	 *
+	 * @return the quantity
+	 */
+	public int getQuantity() {
+		return quantity;
+	}
+
+	/**
+	 * Sets the quantity.
+	 *
+	 * @param quantity the new quantity
+	 */
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	/**
+	 * Gets the remaining quantity.
+	 *
+	 * @return the remaining quantity
+	 */
+	public int getRemainingQuantity() {
+		return remainingQuantity;
+	}
+
+	/**
+	 * Sets the remaining quantity.
+	 *
+	 * @param remainingQuantity the new remaining quantity
+	 */
+	public void setRemainingQuantity(int remainingQuantity) {
+		this.remainingQuantity = remainingQuantity;
+	}
+
+	/**
+	 * Gets the bid price.
+	 *
+	 * @return the bid price
+	 */
+	public double getBidPrice() {
+		return bidPrice;
+	}
+
+	/**
+	 * Sets the bid price.
+	 *
+	 * @param bidPrice the new bid price
+	 */
+	public void setBidPrice(double bidPrice) {
+		this.bidPrice = bidPrice;
+	}
+
+	/**
+	 * Gets the remaining bid price.
+	 *
+	 * @return the remaining bid price
+	 */
+	public double getRemainingBidPrice() {
+		return remainingBidPrice;
+	}
+
+	/**
+	 * Sets the remaining bid price.
+	 *
+	 * @param remainingBidPrice the new remaining bid price
+	 */
+	public void setRemainingBidPrice(double remainingBidPrice) {
+		this.remainingBidPrice = remainingBidPrice;
+	}
+
+	/**
+	 * Gets the sale price.
+	 *
+	 * @return the sale price
+	 */
+	public double getSalePrice() {
+		return salePrice;
+	}
+
+	/**
+	 * Sets the sale price.
+	 *
+	 * @param salePrice the new sale price
+	 */
+	public void setSalePrice(double salePrice) {
+		this.salePrice = salePrice;
+	}
+
+	/**
+	 * Gets the remaining sale price.
+	 *
+	 * @return the remaining sale price
+	 */
+	public double getRemainingSalePrice() {
+		return remainingSalePrice;
+	}
+
+	/**
+	 * Sets the remaining sale price.
+	 *
+	 * @param remainingSalePrice the new remaining sale price
+	 */
+	public void setRemainingSalePrice(double remainingSalePrice) {
+		this.remainingSalePrice = remainingSalePrice;
+	}
+
+	/**
 	 * Checks if is auction open.
 	 *
-	 * @return the open
+	 * @return true, if is auction open
 	 */
 	public boolean isAuctionOpen() {
 		return auctionOpen;
@@ -278,56 +346,20 @@ public class Auction {
 	}
 
 	/**
-	 * Gets the remaining quantity.
-	 *
-	 * @return the remainingQuantity
-	 */
-	public final int getRemainingQuantity() {
-		return remainingQuantity;
-	}
-
-	/**
-	 * Sets the remaining quantity.
-	 *
-	 * @param remainingQuantity the remainingQuantity to set
-	 */
-	public final void setRemainingQuantity(int remainingQuantity) {
-		this.remainingQuantity = remainingQuantity;
-	}
-
-	/**
-	 * Gets the remaining min price sale.
-	 *
-	 * @return the remainingMinPriceSale
-	 */
-	public final double getRemainingMinPriceSale() {
-		return remainingMinPriceSale;
-	}
-
-	/**
-	 * Sets the remaining min price sale.
-	 *
-	 * @param remainingMinPriceSale the remainingMinPriceSale to set
-	 */
-	public final void setRemainingMinPriceSale(double remainingMinPriceSale) {
-		this.remainingMinPriceSale = remainingMinPriceSale;
-	}
-
-	/**
 	 * Checks if is splitable.
 	 *
-	 * @return the splitable
+	 * @return true, if is splitable
 	 */
-	public final boolean isSplitable() {
+	public boolean isSplitable() {
 		return splitable;
 	}
 
 	/**
 	 * Sets the splitable.
 	 *
-	 * @param splitable the splitable to set
+	 * @param splitable the new splitable
 	 */
-	public final void setSplitable(boolean splitable) {
+	public void setSplitable(boolean splitable) {
 		this.splitable = splitable;
 	}
 }
