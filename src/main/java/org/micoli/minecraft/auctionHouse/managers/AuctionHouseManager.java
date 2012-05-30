@@ -12,11 +12,9 @@ import org.micoli.minecraft.utils.PluginEnvironment;
  *
  */
 public class AuctionHouseManager {
+	
 	private static void allocateAuctionToPlayer(String buyerName,int itemId,int quantity){
 		AuctionHouse.getInstance().logger.log("Allocation %d*%d to %s",quantity,itemId,buyerName);
-	}
-	private static double getStackPrice(double price,int numberOfStack){
-		return Math.ceil(price/numberOfStack);
 	}
 	
 	public static String bid(int auctionId, String buyerName, double price){
@@ -62,7 +60,7 @@ public class AuctionHouseManager {
 			return "auction already closed";
 		}
 
-		if(price<AuctionHouseManager.getStackPrice(auction.getRemainingSalePrice(),quantity)*quantity){
+		if(price<auction.getStackPrice()*quantity){
 			return "price inferior to sale price";
 		}
 
@@ -85,7 +83,7 @@ public class AuctionHouseManager {
 		auction.setRemainingQuantity(auction.getQuantity()-quantity);
 		auction.setRemainingSalePrice(auction.getRemainingSalePrice()-price);
 		auction.setBuyer(buyerName);
-		auction.setRemainingBidPrice(auction.getRemainingBidPrice()-AuctionHouseManager.getStackPrice(auction.getRemainingBidPrice(),quantity)*quantity);
+		auction.setRemainingBidPrice(auction.getRemainingBidPrice()-auction.getStackPrice()*quantity);
 		auction.setAuctionOpen(auction.getRemainingQuantity()>0);
 		
 		AuctionHistory auctionHistory = new AuctionHistory(auction.getId());

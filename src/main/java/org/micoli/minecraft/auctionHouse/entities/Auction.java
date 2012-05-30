@@ -1,5 +1,6 @@
 package org.micoli.minecraft.auctionHouse.entities;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -55,6 +56,8 @@ public class Auction {
 
 	/** The min price sale. */
 	double salePrice=0;
+
+	double stackPrice = 0;
 	
 	/** The remaining min price sale. */
 	double remainingSalePrice=0;
@@ -81,17 +84,30 @@ public class Auction {
 		return plugin.getStaticDatabase().find(Auction.class).where().eq("auction_open", true).findList();
 	}
 	
+	/**
+	 * Calc stack price.
+	 */
+	public void calcStackPrice(){
+		if(this.quantity!=0){
+			DecimalFormat df = new DecimalFormat("#.##");
+			setStackPrice(Double.valueOf(df.format(this.getSalePrice()/this.quantity)));
+		}else{
+			setStackPrice(0.0);
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString(){
 		return Json.exportObjectToJson(this);
 	}
-
+	
 	/**
 	 * Save.
 	 */
 	public void save() {
+		this.calcStackPrice();
 		plugin.getStaticDatabase().save(this);
 	}
 
@@ -175,10 +191,20 @@ public class Auction {
 		this.seller = seller;
 	}
 
+	/**
+	 * Gets the buyer.
+	 *
+	 * @return the buyer
+	 */
 	public String getBuyer() {
 		return buyer;
 	}
 
+	/**
+	 * Sets the buyer.
+	 *
+	 * @param buyer the new buyer
+	 */
 	public void setBuyer(String buyer) {
 		this.buyer = buyer;
 	}
@@ -307,6 +333,20 @@ public class Auction {
 	 */
 	public void setSalePrice(double salePrice) {
 		this.salePrice = salePrice;
+	}
+
+	/**
+	 * @return the stackPrice
+	 */
+	public double getStackPrice() {
+		return stackPrice;
+	}
+
+	/**
+	 * @param stackPrice the stackPrice to set
+	 */
+	public void setStackPrice(double stackPrice) {
+		this.stackPrice = stackPrice;
 	}
 
 	/**
